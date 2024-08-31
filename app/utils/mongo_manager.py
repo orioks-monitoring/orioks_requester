@@ -1,6 +1,7 @@
 from http.cookies import SimpleCookie
 
 from app.config import FERNET_CIPHER_SUITE
+from app.exceptions import UserCookiesNotFoundError
 from app.utils.MongoHelper import MongoContextManager
 
 
@@ -20,8 +21,8 @@ async def _get_user_orioks_cookies_from_telegram_id(
     ) as mongo:
         cookies = await mongo.find_one({"user_telegram_id": user_telegram_id})
         if cookies is None:
-            raise FileNotFoundError(
-                f'Cookies of user with telegram id {user_telegram_id} not found in database'
+            raise UserCookiesNotFoundError(
+                f"Cookies of user with telegram id {user_telegram_id} not found in database"
             )
 
     dict_of_cookies = {}
